@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    string userName = UserManager.GetUserName(User);
+    IdentityUser user = await UserManager.FindByNameAsync(userName);
+    @if (user != null && await UserManager.IsInRoleAsync(user, "admin"))
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @userName
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a asp-area="" asp-controller="Admin" asp-action="GetUsers" class="dropdown-item"> Users  </a>
+                    <a asp-area="" asp-controller="Admin" asp-action="GetRoles" class="dropdown-item"> Roles </a>
+                    <a asp-area="" asp-controller="Account" asp-action="ChangePassword" asp-route-name="@UserManager.GetUserName(User)" class="dropdown-item"> Change password </a>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link"> Exit </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
+    else if (user != null && await UserManager.IsInRoleAsync(user, "editor"))
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @userName
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a asp-area="" asp-controller="Game" asp-action="Create" class="dropdown-item">Add game</a>
+                    <a asp-area="" asp-controller="Account" asp-action="ChangePassword" asp-route-name="@UserManager.GetUserName(User)" class="dropdown-item"> Change password </a>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link"> Exit </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="navbar-nav navbar-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @UserManager.GetUserName(User)
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a asp-area="" asp-controller="Account" asp-action="ChangePassword" asp-route-name="@UserManager.GetUserName(User)" class="dropdown-item"> Change password </a>
+                    <form asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                        <button type="submit" class="btn btn-link navbar-btn navbar-link"> Exit </button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item mx-2"><a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-secondary"> Sign up </a></li>
+        <li class="nav-item mx-2"><a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-secondary"> Sign in </a></li>
+    </ul>
+}

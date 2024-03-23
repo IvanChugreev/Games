@@ -1,0 +1,52 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <section>
+            <h2>Sign in to the site</h2>
+
+            <form method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label asp-for="RememberMe">
+                            <input asp-for="RememberMe" />
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <button type="submit" class="btn btn-secondary"> Sign in </button>
+                </div>
+                <br />
+                <div class="form-group">
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="btn btn-info">Forgot your password?</a>
+                    <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl" class="btn btn-info">Sign up</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+
+

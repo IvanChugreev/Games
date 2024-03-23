@@ -1,0 +1,27 @@
+﻿@model ChangeRoleViewModel
+
+<h2> Changing roles for a user @Model.UserEmail </h2>
+<br />
+<form asp-action="EditRole" asp-controller="Admin" method="post" class="text-danger">
+    <input type="hidden" name="id" value="@Model.UserId"/>
+    <div class="form-group">
+        @foreach (var role in Model.AllRoles)
+        {
+            @if (Model.UserRoles.Contains(role.Name))
+            {
+                <input type="checkbox" name="roles" value="@role.Name" checked />
+                @role.Name
+            }
+            else
+            {
+                <input type="checkbox" name="roles" value="@role.Name" />
+                @role.Name
+            }
+            <br />
+        }
+    </div>
+    <br />
+    <div class="form-group">
+        <input type="submit" value="Save"class="btn btn-secondary"/>
+    </div>
+</form>

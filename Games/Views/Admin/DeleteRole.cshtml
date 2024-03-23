@@ -1,0 +1,14 @@
+﻿@model IdentityRole
+
+@{
+    ViewData["Title"] = "DeleteRole";
+}
+
+<h2>Do you really want to delete the role @Model.Name?</h2>
+
+<form asp-route-id="@Model.Id" asp-action="DeleteRole" method="post">
+    <button type="submit" class="btn btn-danger">Yes</button>
+</form>
+<br />
+<a asp-controller="Admin" asp-action="GetRoles" class="btn btn-info">Back</a>
+

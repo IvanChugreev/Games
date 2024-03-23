@@ -1,0 +1,111 @@
+﻿@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<nav class="navbar bg-body-tertiary">
+  <form class="container-fluid" method="get" asp-action="Index" asp-controller="Home">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search Games" aria-label="Search Games" name="searchStr" value="@Model.FilterViewModel.SearchStr">
+        <button class="btn btn-outline-success" type="submit">
+            <span class="input-group-text">&#128270;</span>
+        </button>
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text">Year release from</span>
+        <input type="number" class="form-control" name="MinYear" value="@Model.FilterViewModel.MinYear" />
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text">Year release to</span>
+        <input type="number" class="form-control" name="MaxYear" value="@Model.FilterViewModel.MaxYear" />
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text">Sort state</span>
+        <select class="form-select" aria-label="Sort state" name="sortOrder">
+            <option value="@SortState.NumberOfScoresDesc">Number scores &dArr;</option>
+            <option value="@SortState.NumberOfScoresAsc">Number scores &uArr;</option>
+            <option value="@SortState.ScoreDesc">Score &dArr;</option>
+            <option value="@SortState.ScoreAsc">Score &uArr;</option>
+            <option value="@SortState.DateDesc">Date &dArr;</option>
+            <option value="@SortState.DateAsc">Date &uArr;</option>
+            <option value="@SortState.NameDesc">Name &dArr;</option>
+            <option value="@SortState.NameAsc">Name &uArr;</option>
+        </select>
+    </div>
+  </form>
+</nav>
+
+<div class="container">
+    <div class="row justify-content-around  row-cols-4">
+        @foreach (var game in Model.Games)
+        {
+            <div class="col-md-3 col-sm-3">
+                <div class="card" style="width: 16rem; height: 28rem; margin: 8px">
+                    <img src="@GetImageUrl(game.CoverUrl)" class="card-img-top" alt="Cover">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <a asp-action="Details" asp-controller="Game" asp-route-id="@game.Id" class="btn btn-light">
+                                @game.Name
+                            </a>
+                        </h4>
+@*                        <p class="card-text">Score: @game.UserScore</p>
+                        <p class="card-text">Number scores: @game.NumberOfUserScores</p>*@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<br />
+<ul class="pagination justify-content-center">
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <li class="page-item">
+        <a asp-action="Index"
+            asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+            asp-route-searchstr="@(Model.FilterViewModel.SearchStr)"
+            asp-route-minyear="@(Model.FilterViewModel.MinYear)"
+            asp-route-maxyear="@(Model.FilterViewModel.MaxYear)"
+            asp-route-sortorder="@(Model.CurrentSort)"
+            class="page-link">
+            Back 
+        </a>
+    </li>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <li class="page-item">
+        <a asp-action="Index"
+            asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+            asp-route-searchstr="@(Model.FilterViewModel.SearchStr)"
+            asp-route-minyear="@(Model.FilterViewModel.MinYear)"
+            asp-route-maxyear="@(Model.FilterViewModel.MaxYear)"
+            asp-route-sortorder="@(Model.CurrentSort)"
+            class="page-link">
+            Next 
+        </a>
+    </li>
+}
+</ul>
+
+@functions{
+    public string GetImageUrl(string url)
+    {
+        if (url.Contains("//images.igdb.com/igdb/image/upload/"))
+        {
+            return url;
+        }
+        else if (!string.IsNullOrEmpty(url))
+        {
+            return Url.Content("~/images/") + url;
+        }
+        else
+        {
+            return Url.Content("~/images/") + "no_image.jpg";
+        }
+    }
+}

@@ -1,0 +1,113 @@
+﻿@model Game
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Game</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserScore" />
+            <input type="hidden" asp-for="NumberOfUserScores" />
+            <input type="hidden" asp-for="CoverUrl" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDate" class="control-label"></label>
+                <input asp-for="ReleaseDate" class="form-control" />
+                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Summary" class="control-label"></label>
+                <input asp-for="Summary" class="form-control" />
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoryLine" class="control-label"></label>
+                <input asp-for="StoryLine" class="form-control" />
+                <span asp-validation-for="StoryLine" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Collection: </label><br />
+                <input type="text" placeholder="Collection name" class="flexdatalist" data-min-length="0" list="collections" 
+                value="@Model.Collection?.Name" name="collectionName" />
+                <datalist id="collections">
+                    @foreach (var name in ViewBag.CollectionNames)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Companies: </label><br />
+                <input type="text" placeholder="Company names" class="flexdatalist" data-min-length="0" list="companies" multiple='multiple' 
+                value="@string.Join(',', Model.Companies.Select(c => c.Name))" name="companyNames" />
+                <datalist id="companies">
+                    @foreach (var name in ViewBag.CompanyNames)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Game modes: </label><br />
+                <input type="text" placeholder="Game mode names" class="flexdatalist" data-min-length="0" list="gamemodes" multiple='multiple' 
+                value="@string.Join(',', Model.GameModes.Select(gm => gm.Name))" name="gameModeNames" />
+                <datalist id="gamemodes">
+                    @foreach (var name in ViewBag.GameModeNames)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Genres: </label><br />
+                <input type="text" placeholder="Genre names" class="flexdatalist" data-min-length="0" list="genres" multiple='multiple' 
+                value="@string.Join(',', Model.Genres.Select(g => g.Name))" name="genreNames" />
+                <datalist id="genres">
+                    @foreach (var name in ViewBag.GenreNames)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </datalist>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Keywords: </label><br />
+                <input type="text" placeholder="Keyword names" class="flexdatalist" data-min-length="0" list="keywords" multiple='multiple' 
+                value="@string.Join(',', Model.Keywords.Select(c => c.Name))" name="keywordNames" />
+                <datalist id="keywords">
+                    @foreach (var name in ViewBag.CompanyNames)
+                    {
+                        <option value="@name">@name</option>
+                    }
+                </datalist>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label">Select the file to download</label>
+                <input type="file" name="upload" class="form-control" />
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="Index" asp-controller="Home">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
